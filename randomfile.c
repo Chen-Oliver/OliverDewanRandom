@@ -6,29 +6,32 @@
 
 
 int randNum(){
-  int *ans;
-  int randomData= open("dev/random", O_RDONLY);
-  srandom(read(randomData, ans, 4));
+  unsigned int *ans = (int*)malloc(4);
+  unsigned int randomData= open("/dev/random", O_RDONLY);
+  read(randomData, ans, 4);
   close(randomData);
-  return ans;
+  int temp = *ans;
+  free(ans);
+  return temp;
 }
 
 void printArray(int *x){
-  printf("[ ");
+  printf("generating random numbers:\n");
   int i=0;
   while (i!=10){
-    printf("%d, ", x[i]);
+    printf("random %d: %u\n",i, x[i]);
     i++;
   }
-  printf("]");
 }
 
 int main(){
   int n[11];
-  n[11]='\0';
+  n[10]='\0';
   int i=0;
-  while(i!=10)
+  while(i!=10){
     n[i]=randNum();
-  printArray(n);  
+    i++;
+  }
+  printArray(n); 
   return 0;
 }
